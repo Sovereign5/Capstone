@@ -1,0 +1,43 @@
+<%- include('partials/header.ejs') %>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <h1 class="jumbotron"><strong>Driver Information</strong></h1>
+
+    <h3>First Name: </h3>
+    <input type="text" id="DriveFName">
+    <h3>Last Name: </h3>
+    <input type="text" id="DriverLName">
+    <h3>Produce Item: </h3>
+    <input type="text" id="Item">
+    <h3>Phone Number: </h3>
+    <input type="text" id="Phone">
+    <h3>License Plate: </h3>
+    <input type="text" id="LPlate">
+    <h3>Location: </h3>
+    <input type="text" id="DriverLocation">
+    <button id="DriverLocationBtn">Use Current Location</button><br><br>
+    <button id="SubmitDriverInfo">Submit Info</button>
+  </body>
+
+<script>
+  /*global $ */
+
+  $(document).ready(function(){
+    $("#SubmitDriverInfo").click(function(){
+      $.ajax({
+        method: "GET",
+        url:"/",
+        dataType: "json",
+        data: {
+        },
+        success: function(result){
+        }
+      });
+    });
+  });
+</script>
+</html>

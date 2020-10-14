@@ -13,6 +13,13 @@ app.use(function(req, res, next) {
    res.locals.isAuthenticated = req.session.authenticated; 
    next();
 });
+app.get("/driver", async function(req,res){
+    res.render("driver");
+});
+
+app.get("/database", async function(req,res){
+    res.render("database");
+});
 
 app.get("/", async function(req, res){
     if (req.isAuthenticated) {
