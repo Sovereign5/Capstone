@@ -29,14 +29,81 @@
 
     <!-- JavaScript code to make the map run -->
     <script>
-      let map;
+		let map, infoWindow;
 
-      function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: { lat: 35.35, lng: 139.40 },
-          zoom: 15,
-        });
-      }
+		function initMap() {
+			var userOriginCoords;
+			var userOrigin;
+			var userDestination = new google.maps.LatLng(37.333868240178184, -121.9031049556756);
+		  map = new google.maps.Map(document.getElementById("map"), {
+		    center: { lat: -34.397, lng: 150.644 },
+		    zoom: 15,
+		  });
+		  infoWindow = new google.maps.InfoWindow();
+
+		  // Try HTML5 geolocation.
+		  if (navigator.geolocation) {
+		    navigator.geolocation.getCurrentPosition(
+		      (position) => {
+		        const pos = {
+		          lat: position.coords.latitude,
+		          lng: position.coords.longitude,
+		        };
+		        //userOriginCoords = position;
+		        var lat1 = position.coords.latitude;
+		        var lng1 = position.coords.longitude;
+
+		        /* TODO
+				userOrigin needs to be updated in with the user's lat and lng, but I can't seem to get it to transform to a non-null value. There's something in [[SCOPE]] that might help?
+
+				Perhaps functions could help, but these are two different callback functions that need time to process requests. 
+		        */
+
+		  		//userOrigin = new google.maps.LatLng(lat1, lng1);
+		  		console.log(userOrigin);
+
+		        infoWindow.setPosition(pos);
+		        infoWindow.setContent("You are here!");
+		        infoWindow.open(map);
+		        map.setCenter(pos);
+		      },
+		      () => {
+		        handleLocationError(true, infoWindow, map.getCenter());
+		      }
+		    );
+		  } else {
+		    // Browser doesn't support Geolocation
+		    handleLocationError(false, infoWindow, map.getCenter());
+		  }
+
+		  // Try distance
+		  var service = new google.maps.DistanceMatrixService();
+		  service.getDistanceMatrix(
+		  {
+		  		origins: [userOrigin],
+		  		destinations: [userDestination],
+		  		travelMode: 'DRIVING',
+		  		//divingOptions: DrivingOptions,
+		  		unitSystem: google.maps.UnitSystem.IMPERIAL,
+		  		avoidHighways: true,
+		  		avoidTolls: true,
+		  	}, callback);
+		}
+
+
+		function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		  infoWindow.setPosition(pos);
+		  infoWindow.setContent(
+		    browserHasGeolocation
+		      ? "Error: The Geolocation service failed."
+		      : "Error: Your browser doesn't support geolocation."
+		  );
+		  infoWindow.open(map);
+		}
+
+		function callback(response, status) {
+			console.log(response);
+		}
     </script>
     <!-- /.JavaScript -->
 
