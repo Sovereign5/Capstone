@@ -3,8 +3,48 @@
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBebGg0EYJGo98SWvR4hPRZT7VdI5xiHls&callback=initMap"
+  type="text/javascript"></script>
+
+
+    <!-- CSS Styles just for testing -->
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 50%;
+        width: 50%;
+        align-content: center;
+      }
+
+      /* Optional: Makes the sample page fill the window. */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <!-- /.styles -->
+
+    <!-- JavaScript code to make the map run -->
+    <script>
+      let map;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 35.35, lng: 139.40 },
+          zoom: 15,
+        });
+      }
+    </script>
+    <!-- /.JavaScript -->
+
+  	<div id="map"></div>
   <div class="container">
-    
+
+
+
   </div>
   <!-- /.container -->
 </body>

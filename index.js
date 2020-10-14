@@ -21,6 +21,12 @@ app.get("/", async function(req, res){
     res.render("home");
 });//root
 
+// Maptest, by Chris. This is purely to test Google Maps API for our
+// project uses
+app.get("/maptest", async function(req, res) {
+	res.render("maptest");
+});
+
 // functions //
 
 
