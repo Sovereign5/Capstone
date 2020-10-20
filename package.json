@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/Sovereign5/Capstone/issues"
   },
-  "homepage": "https://github.com/Sovereign5/Capstone#readme"
+  "homepage": "https://github.com/Sovereign5/Capstone#readme",
+  "devDependencies": {
+    "express-session": "^1.17.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
 }
