@@ -10,46 +10,31 @@
 <form method ="POST">
 
     <h3>First Name: </h3>
-    <input type="text" id="DriveFName">
+    <input type="text" name="first_name">
 
     <h3>Last Name: </h3>
-    <input type="text" id="DriverLName">
+    <input type="text" name="last_name">
 
     <h3>Produce Item: </h3>
-    <input type="text" id="Item">
+    <input type="text" name="produce_item">
 
     <h3>Phone Number: </h3>
-    <input type="text" id="Phone">
+    <input type="text" name="phone_number">
 
     <h3>License Plate: </h3>
-    <input type="text" id="LPlate">
+    <input type="text" name="license_plate">
 
     <h3>Location: </h3>
-    <input type="text" id="DriverLocation">
+    <input type="text" name="driver_location">
 
     <button id="DriverLocationBtn">Use Current Location</button><br><br>
-    <button id="SubmitDriverInfo">Submit Info</button>
+    <button id="SubmitDriverInfo">Submit Info</button><br>
 
     <%= typeof(message) != "undefined"?message:"" %>
 
 </form>
 
-</body>
 
-<script>
-    /*global $ */
-    $(document).ready(function(){
-        $("#SubmitDriverInfo").click(function(){
-            $.ajax({
-                method: "GET",
-                url:"/",
-                dataType: "json",
-                data: {
-                },
-                success: function(result){
-                }
-            });
-        });
-    });
-</script>
+
+</body>
 </html>

@@ -17,9 +17,16 @@ app.get("/driver", async function(req,res){
     res.render("driver");
 });
 
-app.post("/driver", async function(){
-   let rows = await insertDriverInfo(req.body);
-   console.log(rows);
+app.post("/driver", async function(req, res){
+    let rows = await insertDriverInfo(req.body);
+    console.log(rows);
+
+    let message = "Driver WAS NOT added to the database!";
+    if (rows.affectedRows > 0) {
+        message= "Driver successfully added!";
+    }
+    res.render("driver", {"message":message});
+
 });
 
 app.get("/database", async function(req,res){
@@ -34,6 +41,34 @@ app.get("/", async function(req, res){
 });//root
 
 // functions //
+
+function insertDriverInfo(body){
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `INSERT INTO drivertable
+                        (first_name, last_name, produce_item, phone_number, license_plate)
+                         VALUES (?,?,?,?,?)`;
+
+            let params = [body.first_name, body.last_name, body.produce_item, body.phone_number, body.license_plate];
+
+            conn.query(sql, params, function (err, rows, fields) {
+                if (err) throw err;
+                //res.send(rows);
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+} // insertDriverInfo
+
+
+
 
 function dbConnection(){
 
