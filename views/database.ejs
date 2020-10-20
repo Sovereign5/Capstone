@@ -13,7 +13,7 @@
 <h1>List of Current Drivers</h1>
 <% driverList.forEach(function(driver){  %>
 
-    [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?driver_id=<%= driver.driver_id %>">DELETE</a>]
+    [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]
 
     <%= driver.driver_id %>
     <%= driver.first_name%>

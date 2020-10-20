@@ -35,7 +35,7 @@ app.get("/database", async function(req,res){
 });
 
 app.get("/deleteDriver", async function(req, res){
-    let rows = await deleteDriver(req.query.driver_id);
+    let rows = await deleteDriver(req.query.name);
     console.log(rows);
     let message = "Driver WAS NOT deleted!";
 
@@ -82,7 +82,7 @@ function insertDriverInfo(body){
     });//promise
 } // insertDriverInfo
 
-function deleteDriver(driver_id){
+function deleteDriver(name){
 
     let conn = dbConnection();
 
@@ -94,7 +94,7 @@ function deleteDriver(driver_id){
             let sql = `DELETE FROM drivertable
                       WHERE driver_id = ?`;
 
-            conn.query(sql, [driver_id], function (err, rows, fields) {
+            conn.query(sql, [name], function (err, rows, fields) {
                 if (err) throw err;
                 //res.send(rows);
                 conn.end();
