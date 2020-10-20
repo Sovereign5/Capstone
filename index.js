@@ -30,8 +30,23 @@ app.post("/driver", async function(req, res){
 });
 
 app.get("/database", async function(req,res){
-    res.render("database");
+    let driverList = await getDriverList();
+    res.render("database", {"driverList":driverList});
 });
+
+app.get("/deleteDriver", async function(req, res){
+    let rows = await deleteDriver(req.query.driver_id);
+    console.log(rows);
+    let message = "Driver WAS NOT deleted!";
+
+    if (rows.affectedRows > 0) {
+        message= "Driver successfully deleted!";
+    }
+
+    let driverList = await getDriverList();
+    res.render("database", {"driverList":driverList});
+});
+
 
 app.get("/", async function(req, res){
     if (req.isAuthenticated) {
@@ -67,6 +82,52 @@ function insertDriverInfo(body){
     });//promise
 } // insertDriverInfo
 
+function deleteDriver(driver_id){
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `DELETE FROM drivertable
+                      WHERE driver_id = ?`;
+
+            conn.query(sql, [driver_id], function (err, rows, fields) {
+                if (err) throw err;
+                //res.send(rows);
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+}
+
+function getDriverList(){
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate
+                        FROM drivertable
+                        ORDER BY driver_id`;
+
+            conn.query(sql, function (err, rows, fields) {
+                if (err) throw err;
+                //res.send(rows);
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+}
 
 
 
