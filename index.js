@@ -28,6 +28,10 @@ app.post("/driver", async function(req, res){
     res.render("driver", {"message":message});
 
 });
+app.get("/notAdmin", async function(req,res){
+    let driverList = await getDriverList();
+    res.render("showNoEdit", {"driverList":driverList});
+});
 
 app.get("/database", async function(req,res){
     let driverList = await getDriverList();
@@ -164,8 +168,7 @@ function getPassword(password){
 
             let sql = `SELECT *
                       FROM userTable
-                      WHERE password = ?,
-                            id = ?`;
+                      WHERE password = ?`;
 
             conn.query(sql, [password], function (err, rows, fields) {
                 if (err) throw err;
@@ -187,10 +190,32 @@ function getUsername(username){
 
             let sql = `SELECT *
                       FROM userTable
-                      WHERE AdminUsername = ?,
-                            id = ?`;
+                      WHERE username = ?`;
 
             conn.query(sql, [username], function (err, rows, fields) {
+                if (err) throw err;
+                //res.send(rows);
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+}
+
+function getAdminStatus(admin){
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT *
+                      FROM userTable
+                      WHERE userTable.admin = ?`;
+
+            conn.query(sql, [admin], function (err, rows, fields) {
                 if (err) throw err;
                 //res.send(rows);
                 conn.end();
