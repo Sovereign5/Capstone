@@ -1,11 +1,47 @@
-<html>
-<head>
-    <title>Page Title</title>
-</head>
+<%- include('partials/header.ejs') %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script>
+
+        function deleteConfirm() {
+            if (!confirm("Delete Driver?")) {
+                event.preventDefault(); //prevents default behavior of the links
+            }
+        }
+    </script>
 <body>
 
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
+<h1> Admin Section </h1>
+<h4>
+
+    <form action="/home">
+        <button> Logout </button>
+        <br>
+    </form>
+
+    <form action="/driver">
+        <button> Add New Driver </button>
+        <br>
+    </form>
+    <form action="/reports">
+        <button> Driver Reports </button>
+        <br>
+    </form>
+
+    <h2>drivers</h2>
+
+</h4>
+<% driverList.forEach(function(driver){  %>
+    [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]
+    <%= driver.driver_id %>
+    <%= driver.first_name%>
+    <%= driver.last_name%>
+    <%= driver.produce_item%>
+    <%= driver.phone_number%>
+    <%= driver.license_plate%>
+    <%= driver.driver_location%>
+    <br>
+<% }) %>
 
 </body>
 </html>
