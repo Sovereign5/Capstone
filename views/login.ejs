@@ -1,7 +1,7 @@
 <%- include('partials/header.ejs') %>
 
 <head>
-    <title>Admin</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/css/styles.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
@@ -27,11 +27,29 @@
         });//click
     }); //document.ready
 </script>
-<body style="background-color: aqua; text-align: center; padding-top: 20mm">
-<h4>Username: </h4>
-<input type="text" id="AdminUsername">
-<h4>Password: </h4>
-<input type="text" id="AdminPassword"> <br><br>
-<button id="AdminLogin">Login</button>
-</body>
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            Login Form
+        </div>
+        <div class="card-body">
+            <form action="/login" method="POST">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 </html>

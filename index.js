@@ -54,14 +54,16 @@ app.get("/deleteDriver", async function(req, res){
     res.render("database", {"driverList":driverList});
 });
 
+app.get("/login", async function(req, res) {
+    res.render("login");
+})
+
 app.get("/", async function(req, res){
     if (req.isAuthenticated) {
         console.log("AUTHENTICATED!");
     }
     res.render("home");
 });//root
-
-
 
 // functions //
 
