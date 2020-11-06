@@ -8,7 +8,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for img, css, js
 
 app.use(express.urlencoded()); //use to parse data sent using the POST method
-app.use(session({ secret: 'any word', cookie: { maxAge: 1000 * 60 * 5 }}));
+app.use(session({ secret: 'any word', cookie: { maxAge: 10000 * 60 * 5 }}));
 app.use(function(req, res, next) {
     res.locals.isAuthenticated = req.session.authenticated;
     next();
