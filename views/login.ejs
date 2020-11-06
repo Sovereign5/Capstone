@@ -1,55 +1,75 @@
 <%- include('partials/header.ejs') %>
 
 <head>
-    <title>Login</title>
     <link rel="stylesheet" href="/css/styles.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
-<script>
-    $(document).ready(function() {
-        $("#AdminLogin").on("click",function(){
-            $.ajax({
-                method: "post",
-                url: "/loginProcess",
-                dataType: "json",
-                data: { "username" : $("#AdminUsername").val(),
-                    "password" : $("#AdminPassword").val()},
-                success: function(result,status) {
-                    //alert(result);
-                    if(!result){
-                        alert("Wrong credentials!")
-                    }else{
-                        location.href = "/database";
-                    }
-                }
-            });//ajax
-        });//click
-    }); //document.ready
-</script>
+<div id="login">
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <!--                        <form id="login-form" class="form" action="" method="post">-->
+                    <h3 class="text-center text-info">Login</h3>
+                    <div class="text-center">
+                        <div class="form-group">
+                            <label for="username" class="text-info">Username:</label><br>
+                            <input type="text" name="username" id="username" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-info">Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control">
+                        </div>
+                        <button class="btn btn-primary" id="loginBtn">Login!</button>
 
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header">
-            Login Form
-        </div>
-        <div class="card-body">
-            <form action="/login" method="POST">
-
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" name="username">
+                        <!--Going to be used for Part 3-->
+                        <div id="register-link" class="text-right">
+                            <a href="/signup" class="text-info">Register here </a>
+                        </div>
+                        <!--                        </form>-->
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Login</button>
-            </form>
+            </div>
         </div>
     </div>
-</div>
 
-</html>
+    <script>
+        $(document).ready(function() {
+
+
+            $("#loginBtn").on("click", function(){
+
+                //alert("works!");
+
+                $.ajax({
+
+                    method: "POST",
+                    url: "/loginProcess",
+                    dataType: "JSON",
+                    data: { "username":$("#username").val(),
+                        "password":$("#password").val() },
+                    success: function(result,status) {
+                        //alert(result);
+                        if (!result.loginSuccess) {
+                            alert("Wrong credentials!");
+
+                        } else {
+                            if (result.admin) {
+                                location.href = "/database"; //redirects to admin route
+                            }
+                            else {
+                                location.href = "/nonadmin"; // redirects to search route
+                            }
+                        }
+                    }
+
+                });//ajax
+
+            });//click
+
+        }); //document.ready
+
+    </script>
+    </body>
+    </html>

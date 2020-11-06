@@ -36,9 +36,29 @@ app.post("/driver", async function(req, res){
 });
 
 
-app.get("/database", async function(req,res){
-    let driverList = await getDriverList();
-    res.render("database", {"driverList":driverList});
+app.get("/database", isAuthenticated, async function(req,res){
+
+    console.log("authenticated: ", req.session.authenticated);
+
+    if (req.session.authenticated) {
+
+        let driverList = await getDriverList();
+        res.render("database", {"driverList": driverList});
+    }
+    else {
+        res.render("login");
+    }
+});
+
+app.get("/nonadmin", isAuthenticated, async function (req, res){
+    console.log("authenticated: ", req.session.authenticated);
+    if (req.session.authenticated) {
+        let driverList = await getDriverList();
+        res.render("nonadmin", {"driverList": driverList});
+    }
+    else {
+        res.render("login");
+    }
 });
 
 app.get("/deleteDriver", async function(req, res){
@@ -56,7 +76,48 @@ app.get("/deleteDriver", async function(req, res){
 
 app.get("/login", async function(req, res) {
     res.render("login");
-})
+});
+
+app.post("/loginProcess", async function (req, res){
+        let users = await getUsers();
+        var validAcc = false;
+        var validPass = false;
+        var isAdmin = false;
+        const {username, password} = req.body;
+        if (!username || !password) {
+            return res.status(400).render("login", {
+                message: "Please enter a username or password"
+            })
+        }
+
+        for (var i = 0; i < users.length; i++) {
+            if (req.body.username == users[i].username) {
+                validAcc = true;
+            }
+            if (validAcc) {
+                if (req.body.password == users[i].password){
+                    validPass = true;
+                    if (users[i].admin == 1) {
+                        isAdmin = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        //console.log(isAdmin, validAcc, validPass);
+
+        if (validAcc && validPass) {
+            req.session.authenticated = true;
+            req.session.user = users[i].id;
+            res.send({"loginSuccess":true, "admin":isAdmin});
+        }
+        else {
+            res.send(false);
+        }
+});
+
+
 
 app.get("/", async function(req, res){
     if (req.isAuthenticated) {
@@ -139,7 +200,30 @@ function getDriverList(){
     });//promise
 }
 
+function getUsers() {
 
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT * FROM usertable`;
+            conn.query(sql, function (err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+
+        }); //connect
+    }); //promise
+}
+
+function isAuthenticated(req, res, next){
+    if(!req.session.authenticated) res.redirect('/login');
+    else next();
+}
 
 function dbConnection(){
 
