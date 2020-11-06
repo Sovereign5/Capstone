@@ -17,6 +17,12 @@ app.get("/driver", async function(req,res){
     res.render("driver");
 });
 
+// Maptest, by Chris. This is purely to test Google Maps API for our
+// project uses
+app.get("/maptest", async function(req, res) {
+    res.render("maptest");
+});
+
 app.post("/driver", async function(req, res){
     let rows = await insertDriverInfo(req.body);
     console.log(rows);
@@ -28,6 +34,7 @@ app.post("/driver", async function(req, res){
     res.render("driver", {"message":message});
 
 });
+
 
 app.get("/database", async function(req,res){
     let driverList = await getDriverList();
@@ -47,13 +54,14 @@ app.get("/deleteDriver", async function(req, res){
     res.render("database", {"driverList":driverList});
 });
 
-
 app.get("/", async function(req, res){
     if (req.isAuthenticated) {
         console.log("AUTHENTICATED!");
     }
     res.render("home");
 });//root
+
+
 
 // functions //
 
