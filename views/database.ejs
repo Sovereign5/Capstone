@@ -1,47 +1,38 @@
 <%- include('partials/header.ejs') %>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="/css/styles.css"/>
-    <script>
-
-        function deleteConfirm() {
-            if (!confirm("Delete Driver?")) {
-                event.preventDefault(); //prevents default behavior of the links
-            }
-        }
-    </script>
-<body>
-
-<h1> Admin Section </h1>
+<h1>List of Current Drivers</h1>
 <h4>
-
-    <form action="/home">
-        <button> Logout </button>
-        <br>
-    </form>
-
-    <form action="/driver">
-        <button> Add New Driver </button>
-        <br>
-    </form>
-    <form action="/reports">
-        <button> Driver Reports </button>
-        <br>
-    </form>
-
-    <h2>drivers</h2>
-
-</h4>
+    <div class="row">
+        <div class="column"></div>
+    <div class="column">ID:</div>
+    <div class="column">First Name:</div>
+    <div class="column">Last Name:</div>
+    <div class="column">Produce:</div>
+    <div class="column">Phone Number:</div>
+    <div class="column">Plate Number:</div>
+    </div>
+    <div class="row">
 <% driverList.forEach(function(driver){  %>
-    [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]
-    <%= driver.driver_id %>
-    <%= driver.first_name%>
-    <%= driver.last_name%>
-    <%= driver.produce_item%>
-    <%= driver.phone_number%>
-    <%= driver.license_plate%>
-    <%= driver.driver_location%>
-    <br>
-<% }) %>
+            <div class="column"> [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]</div>
+            <div class="column"><%= driver.driver_id %></div>
+            <div class="column"><%= driver.first_name%></div>
+            <div class="column"><%= driver.last_name%></div>
+            <div class="column"><%= driver.produce_item%></div>
+            <div class="column"><%= driver.phone_number%></div>
+            <div class="column"><%= driver.license_plate%></div>
+        <br>
 
+<% }) %>
+    </div>
+</h4>
+<form action="/logout">
+    <button> Logout </button>
+</form>
 </body>
+<script>
+    function deleteConfirm() {
+        if (!confirm("Delete Driver?")) {
+            event.preventDefault(); //prevents default behavior of the links
+        }
+    }
+</script>
 </html>

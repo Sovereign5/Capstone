@@ -1,38 +1,36 @@
 <%- include('partials/header.ejs') %>
 
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="/css/styles.css"/>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <h1 class="jumbotron"><strong>Driver Information</strong></h1>
-    <form method ="POST">
-      <h3>
-      First Name:
-      <input type="text" name="first_name"><br>
+<h1><strong>Driver Information</strong></h1>
 
-      Last Name:
-      <input type="text" name="last_name"><br>
+<form method ="POST">
 
-      Produce Item:
-      <input type="text" name="produce_item"><br>
+  <h3>First Name: </h3>
+  <input type="text" name="first_name">
 
-      Phone Number:
-      <input type="text" name="phone_number"><br>
+  <h3>Last Name: </h3>
+  <input type="text" name="last_name">
 
-      License Plate:
-      <input type="text" name="license_plate"><br>
+  <h3>Produce Item: </h3>
+  <input type="text" name="produce_item">
 
-      Location:
-      <input type="text" name="driver_location">
+  <h3>Phone Number: </h3>
+  <input type="text" name="phone_number">
 
-      <button id="DriverLocationBtn">Use Current Location</button><br><br>
-      <button id="SubmitDriverInfo">Submit Info</button><br>
+  <h3>License Plate: </h3>
+  <input type="text" name="license_plate">
 
-      <%= typeof(message) != "undefined"?message:"" %>
-      </h3>
-    </form>
+  <h3>Location: </h3>
+  <input type="text" name="driver_location">
 
-  </body>
+  <button id="DriverLocationBtn">Use Current Location</button><br><br>
+  <button id="SubmitDriverInfo">Submit Info</button><br>
+
+  <%= typeof(message) != "undefined"?message:"" %>
+
+</form>
+
+<div id="map"></div>
+<div class="container"></div>
+
+</body>
 </html>

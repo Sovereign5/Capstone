@@ -1,8 +1,28 @@
 body{
-    background-color: Lightblue;
-    color:#282828;
+    background-color: lightgrey;
     text-align: center;
+
+}
+h1 {
+    background-color: peachpuff;
+    padding: 10mm;
+}
+
+div {
+    background-color: peachpuff;
 }
 header{
-    color:#282828;
+    color:beige;
+}
+.column {
+    float: left;
+    width: 14.2857142857%;
+}
+
+/* Clear floats after the columns */
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
 }

@@ -1,3 +1,4 @@
+
 const express = require("express");
 const mysql   = require("mysql");
 const app = express();
@@ -8,13 +9,19 @@ app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for img, css, js
 
 app.use(express.urlencoded()); //use to parse data sent using the POST method
-app.use(session({ secret: 'secret', cookie: { maxAge: 1000 * 60 * 5 }}));
+app.use(session({ secret: 'any word', cookie: { maxAge: 10000 * 60 * 5 }}));
 app.use(function(req, res, next) {
     res.locals.isAuthenticated = req.session.authenticated;
     next();
 });
 app.get("/driver", async function(req,res){
     res.render("driver");
+});
+
+// Maptest, by Chris. This is purely to test Google Maps API for our
+// project uses
+app.get("/maptest", async function(req, res) {
+    res.render("maptest");
 });
 
 app.post("/driver", async function(req, res){
@@ -28,14 +35,31 @@ app.post("/driver", async function(req, res){
     res.render("driver", {"message":message});
 
 });
-app.get("/notAdmin", async function(req,res){
-    let driverList = await getDriverList();
-    res.render("showNoEdit", {"driverList":driverList});
+
+
+app.get("/database", isAuthenticated, async function(req,res){
+
+    console.log("authenticated: ", req.session.authenticated);
+
+    if (req.session.authenticated) {
+
+        let driverList = await getDriverList();
+        res.render("database", {"driverList": driverList});
+    }
+    else {
+        res.render("login");
+    }
 });
 
-app.get("/database", async function(req,res){
-    let driverList = await getDriverList();
-    res.render("database", {"driverList":driverList});
+app.get("/nonadmin", isAuthenticated, async function (req, res){
+    console.log("authenticated: ", req.session.authenticated);
+    if (req.session.authenticated) {
+        let driverList = await getDriverList();
+        res.render("nonadmin", {"driverList": driverList});
+    }
+    else {
+        res.render("login");
+    }
 });
 
 app.get("/deleteDriver", async function(req, res){
@@ -51,10 +75,58 @@ app.get("/deleteDriver", async function(req, res){
     res.render("database", {"driverList":driverList});
 });
 
-app.get("/",async function(req,res){
-   res.render("drivOrAdm");
+app.get("/login", async function(req, res) {
+    res.render("login");
 });
-app.get("/home", async function(req, res){
+
+app.get("/logout",function(req, res) {
+    req.session.destroy();
+    res.redirect("/");//taking the user back to the login screen
+});
+
+
+app.post("/loginProcess", async function (req, res){
+    let users = await getUsers();
+    var validAcc = false;
+    var validPass = false;
+    var isAdmin = false;
+    const {username, password} = req.body;
+    if (!username || !password) {
+        return res.status(400).render("login", {
+            message: "Please enter a username or password"
+        })
+    }
+
+    for (var i = 0; i < users.length; i++) {
+        if (req.body.username == users[i].username) {
+            validAcc = true;
+        }
+        if (validAcc) {
+            if (req.body.password == users[i].password){
+                validPass = true;
+                if (users[i].admin == 1) {
+                    isAdmin = true;
+                }
+                break;
+            }
+        }
+    }
+
+    //console.log(isAdmin, validAcc, validPass);
+
+    if (validAcc && validPass) {
+        req.session.authenticated = true;
+        req.session.user = users[i].id;
+        res.send({"loginSuccess":true, "admin":isAdmin});
+    }
+    else {
+        res.send(false);
+    }
+});
+
+
+
+app.get("/", async function(req, res){
     if (req.isAuthenticated) {
         console.log("AUTHENTICATED!");
     }
@@ -135,30 +207,8 @@ function getDriverList(){
     });//promise
 }
 
-app.post("/loginProcess", async function(req,res){
-    //console.log(req.body.username);
+function getUsers() {
 
-    let resultPass = await getPassword(req.body.password);
-    let resultUser = await  getUsername(req.body.username);
-
-    let password = "";
-    let username = "";
-    if(resultPass.length > 0){
-        password = resultPass[0].password;
-    }
-    if(resultUser.length > 0){
-        username = resultUser[0].username;
-    }
-    if(req.body.username == username && req.body.password == password){
-        req.session.authenticated = true;
-        req.send({"loginSuccess" : true});
-    }
-    else{
-        res.send(false);
-        //console.log("fail");
-    }
-});
-function getPassword(password){
     let conn = dbConnection();
 
     return new Promise(function(resolve, reject){
@@ -166,66 +216,21 @@ function getPassword(password){
             if (err) throw err;
             console.log("Connected!");
 
-            let sql = `SELECT *
-                      FROM userTable
-                      WHERE password = ?`;
-
-            conn.query(sql, [password], function (err, rows, fields) {
+            let sql = `SELECT * FROM usertable`;
+            conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;
-                //res.send(rows);
                 conn.end();
                 resolve(rows);
             });
 
-        });//connect
-    });//promise
-}
-function getUsername(username){
-    let conn = dbConnection();
-
-    return new Promise(function(resolve, reject){
-        conn.connect(function(err) {
-            if (err) throw err;
-            console.log("Connected!");
-
-            let sql = `SELECT *
-                      FROM userTable
-                      WHERE username = ?`;
-
-            conn.query(sql, [username], function (err, rows, fields) {
-                if (err) throw err;
-                //res.send(rows);
-                conn.end();
-                resolve(rows);
-            });
-
-        });//connect
-    });//promise
+        }); //connect
+    }); //promise
 }
 
-function getAdminStatus(admin){
-    let conn = dbConnection();
-
-    return new Promise(function(resolve, reject){
-        conn.connect(function(err) {
-            if (err) throw err;
-            console.log("Connected!");
-
-            let sql = `SELECT *
-                      FROM userTable
-                      WHERE userTable.admin = ?`;
-
-            conn.query(sql, [admin], function (err, rows, fields) {
-                if (err) throw err;
-                //res.send(rows);
-                conn.end();
-                resolve(rows);
-            });
-
-        });//connect
-    });//promise
+function isAuthenticated(req, res, next){
+    if(!req.session.authenticated) res.redirect('/login');
+    else next();
 }
-
 
 function dbConnection(){
 

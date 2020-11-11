@@ -1,37 +1,9 @@
-<html>
-<head>
-    <title>Admin</title>
-    <link rel="stylesheet" href="/css/styles.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</head>
-<script>
-    $(document).ready(function() {
-        $("#AdminLogin").on("click",function(){
-            $.ajax({
-                method: "post",
-                url: "/loginProcess",
-                dataType: "json",
-                data: { "username" : $("#AdminUsername").val(),
-                    "password" : $("#AdminPassword").val()},
-                success: function(result,status) {
-                    //alert(result);
-                    if(!result){
-                        alert("Wrong credentials!")
-                    }else{
-                        location.href = "/database";
-                    }
-                }
 
-            });//ajax
-        });//click
-    }); //document.ready
-</script>
-<body style="background-color: aqua; text-align: center; padding-top: 20mm">
-<h4>Username: </h4>
-<input type="text" id="AdminUsername">
-<h4>Password: </h4>
-<input type="text" id="AdminPassword"> <br><br>
-<button id="AdminLogin">Login</button>
+<%- include('partials/header.ejs') %>
+<h1>
+    <strong>Welcome</strong><br><br>
+    <a href="login">Admin</a>
+    <a href="driver">Driver</a>
+</h1>
 </body>
 </html>
