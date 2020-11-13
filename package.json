@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "google-distance-matrix": "^1.1.1",
     "mysql": "^2.18.1"
   }
 }

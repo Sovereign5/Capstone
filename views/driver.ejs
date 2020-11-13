@@ -28,7 +28,8 @@
     <input type="text" name="license_plate">
 
     <h3>Location: </h3>
-    <input type="text" name="driver_location">
+    <input type="hidden" name="driver_location">
+    <span id="duration"></span>
 
     <button id="DriverLocationBtn">Use Current Location</button><br><br>
     <button id="SubmitDriverInfo">Submit Info</button><br>
@@ -42,7 +43,9 @@
 
 </body>
 
-<script>let map, infoWindow;
+<script>
+    let map, infoWindow;
+
     async function initMap() {
         // Variables
         var userOriginCoords;
@@ -62,7 +65,11 @@
         // Try distance
         var service = new google.maps.DistanceMatrixService();
         var distance = await getDistance(service, userOrigin, userDestination);
+
         //console.log(callback.response); // cout doesn't work, returns undefined
+        //console.log(distance);
+
+
     }
     // -------------- functions -------------------- //
     // New function that gets the user's location
@@ -119,10 +126,19 @@
                     var duration = element.duration.text;
                     var from = origins[i];
                     var to = destinations[j];
+
+                    var duration2 = response.rows[0].elements[0].duration;
+                    var duration_text = duration2.text;
+
+                    $("#duration").text(duration_text);
+
                 }
             }
         }
     }
+
+
+
 
 </script>
 

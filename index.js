@@ -2,7 +2,7 @@ const express = require("express");
 const mysql   = require("mysql");
 const app = express();
 const session = require('express-session');
-
+// const distance = require('google-distance-matrix');
 
 app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for img, css, js
@@ -219,6 +219,9 @@ function getUsers() {
         }); //connect
     }); //promise
 }
+
+
+
 
 function isAuthenticated(req, res, next){
     if(!req.session.authenticated) res.redirect('/login');
