@@ -18,6 +18,7 @@ app.get("/driver", async function(req,res){
     res.render("driver");
 });
 
+
 // Maptest, by Chris. This is purely to test Google Maps API for our
 // project uses
 app.get("/maptest", async function(req, res) {
@@ -60,6 +61,10 @@ app.get("/nonadmin", isAuthenticated, async function (req, res){
     else {
         res.render("login");
     }
+});
+app.get("/driverID", async function (req, res){
+        let driverList = await getDriverID();
+        res.render("driverid", {"driverList": driverList});
 });
 
 app.get("/deleteDriver", async function(req, res){
@@ -160,6 +165,8 @@ function insertDriverInfo(body){
     });//promise
 } // insertDriverInfo
 
+
+
 function deleteDriver(name){
 
     let conn = dbConnection();
@@ -195,6 +202,30 @@ function getDriverList(){
             let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate
                         FROM drivertable
                         ORDER BY driver_id`;
+
+            conn.query(sql, function (err, rows, fields) {
+                if (err) throw err;
+                //res.send(rows);
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+}
+function getDriverID(){
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT driver_id
+                        FROM drivertable
+                        ORDER BY driver_id DESC
+                        LIMIT 1`;
 
             conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;
