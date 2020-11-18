@@ -18,7 +18,10 @@ header{
     float: left;
     width: 14.2857142857%;
 }
-
+#dis{
+    float: left;
+    width: 16.666%;
+}
 /* Clear floats after the columns */
 /* Clear floats after the columns */
 .row:after {
