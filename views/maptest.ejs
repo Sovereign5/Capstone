@@ -53,9 +53,10 @@
 
 
 		  // Try distance
+		  var response;
 		  var service = new google.maps.DistanceMatrixService();
-		  var distance = await getDistance(service, userOrigin, userDestination);
-		  //console.log(callback.response); // cout doesn't work, returns undefined
+		  await getDistance(service, userOrigin, userDestination);
+		  
 		}
 
 // -------------- functions -------------------- // 
