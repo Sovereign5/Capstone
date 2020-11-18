@@ -78,6 +78,11 @@ app.get("/login", async function(req, res) {
     res.render("login");
 });
 
+app.get("/logout",function(req, res) {
+    req.session.destroy();
+    res.redirect("/");//taking the user back to the login screen
+});
+
 app.post("/loginProcess", async function (req, res){
         let users = await getUsers();
         var validAcc = false;

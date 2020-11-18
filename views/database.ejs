@@ -1,5 +1,33 @@
 <%- include('partials/header.ejs') %>
 
+<h1>List of Current Drivers</h1>
+<h4>
+    <div class="row">
+        <div class="column"></div>
+        <div class="column">ID:</div>
+        <div class="column">First Name:</div>
+        <div class="column">Last Name:</div>
+        <div class="column">Produce:</div>
+        <div class="column">Phone Number:</div>
+        <div class="column">Plate Number:</div>
+    </div>
+    <div class="row">
+        <% driverList.forEach(function(driver){  %>
+            <div class="column"> [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]</div>
+            <div class="column"><%= driver.driver_id %></div>
+            <div class="column"><%= driver.first_name%></div>
+            <div class="column"><%= driver.last_name%></div>
+            <div class="column"><%= driver.produce_item%></div>
+            <div class="column"><%= driver.phone_number%></div>
+            <div class="column"><%= driver.license_plate%></div>
+            <br>
+        <% }) %>
+    </div>
+</h4>
+<form action="/logout">
+    <button> Logout </button>
+</form>
+</body>
 <script>
     function deleteConfirm() {
         if (!confirm("Delete Driver?")) {
@@ -7,28 +35,4 @@
         }
     }
 </script>
-
-<body>
-
-<h1>List of Current Drivers</h1>
-<% driverList.forEach(function(driver){  %>
-
-    [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]
-
-    <%= driver.driver_id %>
-    <%= driver.first_name%>
-    <%= driver.last_name%>
-    <%= driver.produce_item%>
-    <%= driver.phone_number%>
-    <%= driver.license_plate%>
-
-
-
-<br>
-
-
-
-<% }) %>
-
-</body>
 </html>

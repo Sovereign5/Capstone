@@ -1,20 +1,28 @@
 <%- include('partials/header.ejs') %>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<link rel="stylesheet" href="/css/styles.css"/>
-
-<body>
+<body id = "backGround">
 
 <h2>Incoming Drivers</h2>
-<% driverList.forEach(function(driver){  %>
-    <%= driver.driver_id %>
-    <%= driver.first_name%>
-    <%= driver.last_name%>
-    <%= driver.produce_item%>
-    <%= driver.phone_number%>
-    <%= driver.license_plate%>
-    <%= driver.driver_location%>
-    <br>
-<% }) %>
-<a href="/home">Logout</a>
+<div class="row">
+    <div class="column" id="dis">ID:</div>
+    <div class="column" id="dis">First Name:</div>
+    <div class="column" id="dis">Last Name:</div>
+    <div class="column"id="dis">Produce:</div>
+    <div class="column" id="dis">Phone Number:</div>
+    <div class="column" id="dis">Plate Number:</div>
+</div>
+<div class="row">
+    <% driverList.forEach(function(driver){  %>
+        <div class="column" id="dis"><%= driver.driver_id %></div>
+        <div class="column" id="dis"><%= driver.first_name%></div>
+        <div class="column" id="dis"><%= driver.last_name%></div>
+        <div class="column" id="dis"><%= driver.produce_item%></div>
+        <div class="column" id="dis"><%= driver.phone_number%></div>
+        <div class="column" id="dis"><%= driver.license_plate%></div>
+        <br>
+    <% }) %>
+</div>
+<form action="/logout">
+    <button> Logout </button>
+</form>
 </body>
 </html>
