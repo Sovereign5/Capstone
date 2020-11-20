@@ -1,0 +1,20 @@
+<%- include('partials/header.ejs') %>
+<h1 class="text-center display-3"><strong><i> Updating Dock Number </i></strong></h1>
+
+<br>
+<form method="POST">
+    <input type="hidden" driver_id="driver_id" value="<%= dockInfo.driver_id %>">
+    Driver ID: <%= dockInfo.driver_id %> (Non-changable)<br>
+
+    Dock: <input type="text" name="dock" value="<%= dockInfo.dock %>"><br>
+
+    <br><br>
+    <button class="btn btn-primary">Update</button><br>
+
+    <%= typeof(message) != "undefined"?message:"" %>
+
+</form>
+
+<br><br>
+</body>
+</html>

@@ -128,6 +128,25 @@ app.post("/loginProcess", async function (req, res){
         }
 });
 
+app.get("/updateDock", isAuthenticated, async function(req, res){
+    let dockInfo = await getDriverInfo(req.query.driver_id);
+    res.render("updateDock", {"dockInfo":dockInfo});
+});
+
+app.post("/updateDock", async function(req, res){
+    let rows = await updateDock(req.body);
+
+    let dockInfo = req.body;
+    console.log(rows);
+
+    let message = "Dock number WAS NOT updated!";
+    if (rows.affectedRows > 0) {
+        message= "Dock number successfully updated!";
+    }
+    res.render("updateDock", {"message":message, "dockInfo":dockInfo});
+});
+
+
 
 
 app.get("/", async function(req, res){
@@ -164,6 +183,31 @@ function insertDriverInfo(body){
     });//promise
 } // insertDriverInfo
 
+function updateDock(body) {
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject) {
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `UPDATE drivertable
+                       SET dock = ?
+                       WHERE driver_id = ?`;
+
+            let params = [body.dock, body.driver_id];
+            console.log(sql);
+
+            conn.query(sql, params, function(err, rows, fields){
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+        });
+    });
+}
+
+
 function deleteDriver(name){
 
     let conn = dbConnection();
@@ -185,6 +229,26 @@ function deleteDriver(name){
 
         });//connect
     });//promise
+}
+
+function getDriverInfo(name) {
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject) {
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT * 
+                       FROM drivertable
+                       WHERE driver_id = ?`;
+            conn.query(sql, [name], function(err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows[0]);
+            });
+        });
+    });
 }
 
 function getDriverList(){
