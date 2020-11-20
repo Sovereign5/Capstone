@@ -25,6 +25,57 @@ app.get("/maptest", async function(req, res) {
     res.render("maptest");
 });
 
+app.get("/updatedock", async function(req, res){
+
+    let driver_id = req.query.name;
+
+    let dockInfo = await updateDock(driver_id);
+
+    res.render("updateItem", {"itemInfo" : dockInfo});
+
+});//admin
+
+app.post("/updatedock", async function(req, res){
+
+    let rows = await updateDock(req.body.name);
+
+    console.log(req.body.name);
+
+    let driver_id = req.query.name;
+
+    let dockInfo = await updateDock(driver_id);
+
+    console.log(dockInfo);
+
+    let message = "Dock WAS NOT updated!";
+    if(rows.affectedRows > 0){
+        message = "Dock successfully updated!";
+    }
+
+    res.render("updatedock", {"message" : message});
+
+});//admin
+function updateDock(name){
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err){
+            if(err) throw err;
+            console.log("Connected!");
+
+            let sql = `UPDATE driverTable SET 
+                            dock = ?
+                        WHERE driver_id = ?`;
+            let params = [name.dock];
+
+            conn.query(sql, params, function(err, rows, field){
+                if(err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+        });
+    });//Promise
+}
 app.post("/driver", async function(req, res){
     let rows = await insertDriverInfo(req.body);
     console.log(rows);
@@ -199,7 +250,7 @@ function getDriverList(){
             if (err) throw err;
             console.log("Connected!");
 
-            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate
+            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
                         ORDER BY driver_id`;
 
