@@ -1,0 +1,10 @@
+<%- include('partials/header.ejs') %>
+
+<h2>Your Id Number: </h2>
+
+<% driverList.forEach(function(driver){  %>
+    <div><%= driver.driver_id %></div>
+<% }) %>
+
+</body>
+</html>

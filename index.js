@@ -61,6 +61,12 @@ app.get("/nonadmin", isAuthenticated, async function (req, res){
     }
 });
 
+app.get("/driverID", async function (req, res){
+    let driverList = await getDriverID();
+    res.render("driverid", {"driverList": driverList});
+});
+
+
 app.get("/deleteDriver", async function(req, res){
     let rows = await deleteDriver(req.query.name);
     console.log(rows);
@@ -204,6 +210,32 @@ function getDriverList(){
         });//connect
     });//promise
 }
+
+function getDriverID(){
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT driver_id
+                        FROM drivertable
+                        ORDER BY driver_id DESC
+                        LIMIT 1`;
+
+            conn.query(sql, function (err, rows, fields) {
+                if (err) throw err;
+                //res.send(rows);
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+}
+
 
 function getUsers() {
 
