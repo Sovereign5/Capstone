@@ -22,6 +22,7 @@ header{
     float: left;
     width: 16.666%;
 }
+
 /* Clear floats after the columns */
 /* Clear floats after the columns */
 .row:after {

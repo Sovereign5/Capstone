@@ -17,7 +17,17 @@ app.use(function(req, res, next) {
 app.get("/driver", async function(req,res){
     res.render("driver");
 });
+app.post("/driver", async function(req, res){
+    let rows = await insertDriverInfo(req.body);
+    console.log(rows);
 
+    let message = "Driver WAS NOT added to the database!";
+    if (rows.affectedRows > 0) {
+        message= "Driver successfully added!";
+    }
+    res.render("driver", {"message":message});
+
+});
 
 // Maptest, by Chris. This is purely to test Google Maps API for our
 // project uses
@@ -76,18 +86,67 @@ function updateDock(name){
         });
     });//Promise
 }
-app.post("/driver", async function(req, res){
-    let rows = await insertDriverInfo(req.body);
+
+
+app.post("/", async function(req, res){
+    let rows = await DriverId(req.body.id);
     console.log(rows);
 
-    let message = "Driver WAS NOT added to the database!";
+    let message = "Id was not found!";
     if (rows.affectedRows > 0) {
-        message= "Driver successfully added!";
+        message= "Driver found!";
     }
-    res.render("driver", {"message":message});
+    console.log(message);
+    res.render("home", {"message":message});
+
+});
+app.get("/docknumber", async function (req, res){
+    let driverList = await DriverId();
+    res.render("docknumber",{"driverList" : driverList});
+});
+app.post("/docknumber", async function(req, res){
+    let rows = await DriverId(req.body.id);
+    console.log(rows);
+
+    let message = "Id was not found!";
+    if (rows.affectedRows > 0) {
+        message= "Driver found!";
+    }
+    console.log(message);
+    res.render("docknumber", {"message":message});
 
 });
 
+// app.post("/docknumber",async function(req,res){
+//     let rows = await DriverId(req.body);
+//     console.log(rows);
+//
+//     let message = "Id was not found!";
+//     if (rows.affectedRows > 0) {
+//         message= "Driver found!";
+//     }
+//     res.render("docknumber", {"message":message});
+// });
+function DriverId(id) {
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT dock FROM drivertable
+                        WHERE driver_id = ?`;
+            conn.query(sql,[id], function (err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+
+        }); //connect
+    }); //promise
+}
 
 app.get("/database", isAuthenticated, async function(req,res){
 
