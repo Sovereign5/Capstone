@@ -133,6 +133,7 @@ app.get("/updateDock", isAuthenticated, async function(req, res){
     res.render("updateDock", {"dockInfo":dockInfo});
 });
 
+
 app.post("/updateDock", async function(req, res){
     let rows = await updateDock(req.body);
 
@@ -145,7 +146,6 @@ app.post("/updateDock", async function(req, res){
     }
     res.render("updateDock", {"message":message, "dockInfo":dockInfo});
 });
-
 
 
 
@@ -183,29 +183,35 @@ function insertDriverInfo(body){
     });//promise
 } // insertDriverInfo
 
-function updateDock(body) {
+
+function updateDock(body){
+
     let conn = dbConnection();
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject){
         conn.connect(function(err) {
             if (err) throw err;
             console.log("Connected!");
 
             let sql = `UPDATE drivertable
-                       SET dock = ?
-                       WHERE driver_id = ?`;
+                      SET dock = ?
+                      
+                     WHERE driver_id = ?`;
 
             let params = [body.dock, body.driver_id];
+
             console.log(sql);
 
-            conn.query(sql, params, function(err, rows, fields){
+            conn.query(sql, params, function (err, rows, fields) {
                 if (err) throw err;
                 conn.end();
                 resolve(rows);
             });
-        });
-    });
-}
+
+        });//connect
+    });//promise
+} // updateProduct
+
 
 
 function deleteDriver(name){
@@ -231,7 +237,7 @@ function deleteDriver(name){
     });//promise
 }
 
-function getDriverInfo(name) {
+function getDriverInfo(driver_id) {
     let conn = dbConnection();
 
     return new Promise(function(resolve, reject) {
@@ -242,7 +248,7 @@ function getDriverInfo(name) {
             let sql = `SELECT * 
                        FROM drivertable
                        WHERE driver_id = ?`;
-            conn.query(sql, [name], function(err, rows, fields) {
+            conn.query(sql, [driver_id], function(err, rows, fields) {
                 if (err) throw err;
                 conn.end();
                 resolve(rows[0]);
