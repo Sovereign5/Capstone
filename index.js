@@ -66,6 +66,25 @@ app.get("/driverID", async function (req, res){
     res.render("driverid", {"driverList": driverList});
 });
 
+app.get("/docknumber", async function (req, res){
+    let driverList = await DriverId();
+    res.render("docknumber",{"driverList" : driverList});
+});
+
+app.post("/docknumber", async function(req, res){
+    let rows = await DriverId(req.body.id);
+    console.log(rows);
+
+    let message = "ID was not found!";
+    if (rows.affectedRows > 0) {
+        message= "Driver found!";
+    }
+    console.log(message);
+    res.render("docknumber", {"message":message});
+
+});
+
+
 
 app.get("/deleteDriver", async function(req, res){
     let rows = await deleteDriver(req.query.name);
