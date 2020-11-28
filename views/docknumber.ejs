@@ -1,0 +1,10 @@
+<%- include('partials/header.ejs') %>
+
+<h2>Your Dock Number Is: </h2>
+<% driverList.forEach(function(driver){  %>
+    <div><%= driver.dock%></div>
+    <br>
+<% }) %>
+<button><a href ="/">Home</a></button>
+</body>
+</html>
