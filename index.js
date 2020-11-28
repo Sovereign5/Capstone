@@ -84,8 +84,6 @@ app.post("/docknumber", async function(req, res){
 
 });
 
-
-
 app.get("/deleteDriver", async function(req, res){
     let rows = await deleteDriver(req.query.name);
     console.log(rows);
@@ -323,6 +321,27 @@ function getDriverID(){
 
         });//connect
     });//promise
+}
+
+function DriverId(id) {
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT dock FROM drivertable
+                        WHERE driver_id = ?`;
+            conn.query(sql,[id], function (err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+
+        }); //connect
+    }); //promise
 }
 
 
