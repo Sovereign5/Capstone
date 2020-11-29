@@ -5,6 +5,7 @@
         <div class="column"></div>
         <div class="column"></div>
         <div class="column">ID:</div>
+        <div class="column">ETA:</div>
         <div class="column">First Name:</div>
         <div class="column">Last Name:</div>
         <div class="column">Produce:</div>
@@ -17,6 +18,7 @@
             <div class="column">[<a href="/updateDock?driver_id=<%= driver.driver_id %>">UPDATE</a>]</div>
             <div class="column"> [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]</div>
             <div class="column"><%= driver.driver_id %></div>
+            <div class="column"><%= driver.duration %></div>
             <div class="column"><%= driver.first_name%></div>
             <div class="column"><%= driver.last_name%></div>
             <div class="column"><%= driver.produce_item%></div>

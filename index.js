@@ -313,9 +313,9 @@ function getDriverList(){
             if (err) throw err;
             console.log("Connected!");
 
-            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate, dock
+            let sql = `SELECT driver_id, duration, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
-                        ORDER BY driver_id`;
+                        ORDER BY duration ASC `;
 
             conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;
