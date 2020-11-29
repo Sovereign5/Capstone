@@ -279,28 +279,29 @@ function getDriverInfo(driver_id) {
     });
 }
 
-function getDockInfo(query) {
-    let id = query;
+function getDockInfo(query){
+
     let conn = dbConnection();
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject){
         conn.connect(function(err) {
             if (err) throw err;
             console.log("Connected!");
 
-            //let params = [];
+            let sql = `SELECT *
+                      FROM drivertable
+                      WHERE driver_id = '${query.driver_id}' `; // if you change driver_id = ? it will display dock val
 
-            let sql = `SELECT * 
-                       FROM drivertable
-                       WHERE driver_id = '%${id}%'`; // if you change driver_id = ? it will display dock val
             console.log("SQL:", sql);
-            conn.query(sql, [query], function(err, rows, fields) {
+            conn.query(sql, [query.driver_id], function (err, rows, fields) {
                 if (err) throw err;
                 conn.end();
                 resolve(rows);
             });
-        });
-    });
+
+        });//connect
+    });//promise
+
 }
 
 function getDriverList(){
@@ -312,7 +313,7 @@ function getDriverList(){
             if (err) throw err;
             console.log("Connected!");
 
-            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate
+            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
                         ORDER BY driver_id`;
 

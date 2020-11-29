@@ -4,10 +4,17 @@
 
 <br>
 <br>
-<% driverList.forEach(function(driver){  %>
-    <%= driver.dock%>
-    <br>
-<% }) %>
+
+<div class="container">
+    <table class="table">
+        <% driverList.forEach( function(driver){ %>
+        <tr>
+            <td class="align-middle"><h2><%= driver.dock %></h2></td>
+        </tr>
+        <% })  %>
+
+    </table>
+</div>
 
 <button><a href ="/">Home</a></button>
 </body>
