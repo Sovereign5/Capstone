@@ -67,10 +67,12 @@ app.get("/driverID", async function (req, res){
 });
 
 app.get("/docknumber", async function (req, res){
-    let driverList = await DriverId();
-    res.render("docknumber",{"driverList" : driverList});
+    //let driverList = await DriverId();
+    let rows = await getDockInfo(req.query);
+    res.render("docknumber",{"driverList" : rows});
 });
 
+/*
 app.post("/docknumber", async function(req, res){
     let rows = await DriverId(req.body.id);
     console.log(rows);
@@ -83,6 +85,7 @@ app.post("/docknumber", async function(req, res){
     res.render("docknumber", {"message":message});
 
 });
+*/
 
 app.get("/deleteDriver", async function(req, res){
     let rows = await deleteDriver(req.query.name);
@@ -172,6 +175,8 @@ app.get("/", async function(req, res){
     }
     res.render("home");
 });//root
+
+
 
 // functions //
 
@@ -269,6 +274,30 @@ function getDriverInfo(driver_id) {
                 if (err) throw err;
                 conn.end();
                 resolve(rows[0]);
+            });
+        });
+    });
+}
+
+function getDockInfo(query) {
+    let id = query;
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject) {
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            //let params = [];
+
+            let sql = `SELECT * 
+                       FROM drivertable
+                       WHERE driver_id = '%${id}%'`; // if you change driver_id = ? it will display dock val
+            console.log("SQL:", sql);
+            conn.query(sql, [query], function(err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
             });
         });
     });
