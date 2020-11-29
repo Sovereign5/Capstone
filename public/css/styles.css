@@ -20,9 +20,8 @@ header{
 }
 #dis{
     float: left;
-    width: 12.5%;
+    width: 10.5%;
 }
-/* Clear floats after the columns */
 /* Clear floats after the columns */
 .row:after {
     content: "";
