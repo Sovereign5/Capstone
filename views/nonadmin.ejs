@@ -4,20 +4,25 @@
     <h2>Incoming Drivers</h2>
     <div class="row">
         <div class="column" id="dis">ID:</div>
+        <div class="column" id="dis">ETA:</div>
         <div class="column" id="dis">First Name:</div>
         <div class="column" id="dis">Last Name:</div>
         <div class="column"id="dis">Produce:</div>
         <div class="column" id="dis">Phone Number:</div>
         <div class="column" id="dis">Plate Number:</div>
+        <div class="column" id="dis">Dock Number:</div>
     </div>
     <div class="row">
 <% driverList.forEach(function(driver){  %>
             <div class="column" id="dis"><%= driver.driver_id %></div>
+            <div class="column" id="dis"><%= driver.duration %></div>
             <div class="column" id="dis"><%= driver.first_name%></div>
             <div class="column" id="dis"><%= driver.last_name%></div>
             <div class="column" id="dis"><%= driver.produce_item%></div>
             <div class="column" id="dis"><%= driver.phone_number%></div>
             <div class="column" id="dis"><%= driver.license_plate%></div>
+            <div class="column" id="dis"><%= driver.dock %></div>
+
             <br>
 <% }) %>
     </div>

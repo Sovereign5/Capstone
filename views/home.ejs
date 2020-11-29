@@ -1,15 +1,27 @@
-
 <%- include('partials/header.ejs') %>
+
+<head>
+    <title>Admin</title>
+    <link rel="stylesheet" href="/css/styles.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</head>
+<body>
 <h1>
     <strong>Welcome</strong><br><br>
     <a href="login">Admin</a>
     <a href="driver">Driver</a>
 </h1>
-If you have driver Id
-<form method="post">
-    <input type="text">
+Already have an existing Driver ID?
+<form action="/docknumber">
     <br>
-    <button id="SubmitDriverId"><a href="/docknumber?id=">Submit</a></button>
+    <input type="text" name="driver_id">
+    <br>
+    <br>
+    <!--  <button id="SubmitDriverId"><a href="/docknumber?id=">Submit</a></button>-->
+    <!--  <button id="SubmitDriverId"><a href="/docknumber?driver_id=">Submit</a></button>-->
+    <button>Submit</button>
 </form>
+
 </body>
 </html>

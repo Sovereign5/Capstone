@@ -1,9 +1,8 @@
-
 const express = require("express");
 const mysql   = require("mysql");
 const app = express();
 const session = require('express-session');
-
+// const distance = require('google-distance-matrix');
 
 app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for img, css, js
@@ -17,6 +16,13 @@ app.use(function(req, res, next) {
 app.get("/driver", async function(req,res){
     res.render("driver");
 });
+
+// Maptest, by Chris. This is purely to test Google Maps API for our
+// project uses
+app.get("/maptest", async function(req, res) {
+    res.render("maptest");
+});
+
 app.post("/driver", async function(req, res){
     let rows = await insertDriverInfo(req.body);
     console.log(rows);
@@ -29,124 +35,6 @@ app.post("/driver", async function(req, res){
 
 });
 
-// Maptest, by Chris. This is purely to test Google Maps API for our
-// project uses
-app.get("/maptest", async function(req, res) {
-    res.render("maptest");
-});
-
-app.get("/updatedock", async function(req, res){
-
-    let driver_id = req.query.name;
-
-    let dockInfo = await updateDock(driver_id);
-
-    res.render("updateItem", {"itemInfo" : dockInfo});
-
-});//admin
-
-app.post("/updatedock", async function(req, res){
-
-    let rows = await updateDock(req.body.name);
-
-    console.log(req.body.name);
-
-    let driver_id = req.query.name;
-
-    let dockInfo = await updateDock(driver_id);
-
-    console.log(dockInfo);
-
-    let message = "Dock WAS NOT updated!";
-    if(rows.affectedRows > 0){
-        message = "Dock successfully updated!";
-    }
-
-    res.render("updatedock", {"message" : message});
-
-});//admin
-function updateDock(name){
-    let conn = dbConnection();
-
-    return new Promise(function(resolve, reject){
-        conn.connect(function(err){
-            if(err) throw err;
-            console.log("Connected!");
-
-            let sql = `UPDATE driverTable SET 
-                            dock = ?
-                        WHERE driver_id = ?`;
-            let params = [name.dock];
-
-            conn.query(sql, params, function(err, rows, field){
-                if(err) throw err;
-                conn.end();
-                resolve(rows);
-            });
-        });
-    });//Promise
-}
-
-
-app.post("/", async function(req, res){
-    let rows = await DriverId(req.body.id);
-    console.log(rows);
-
-    let message = "Id was not found!";
-    if (rows.affectedRows > 0) {
-        message= "Driver found!";
-    }
-    console.log(message);
-    res.render("home", {"message":message});
-
-});
-app.get("/docknumber", async function (req, res){
-    let driverList = await DriverId();
-    res.render("docknumber",{"driverList" : driverList});
-});
-app.post("/docknumber", async function(req, res){
-    let rows = await DriverId(req.body.id);
-    console.log(rows);
-
-    let message = "Id was not found!";
-    if (rows.affectedRows > 0) {
-        message= "Driver found!";
-    }
-    console.log(message);
-    res.render("docknumber", {"message":message});
-
-});
-
-// app.post("/docknumber",async function(req,res){
-//     let rows = await DriverId(req.body);
-//     console.log(rows);
-//
-//     let message = "Id was not found!";
-//     if (rows.affectedRows > 0) {
-//         message= "Driver found!";
-//     }
-//     res.render("docknumber", {"message":message});
-// });
-function DriverId(id) {
-
-    let conn = dbConnection();
-
-    return new Promise(function(resolve, reject){
-        conn.connect(function(err) {
-            if (err) throw err;
-            console.log("Connected!");
-
-            let sql = `SELECT dock FROM drivertable
-                        WHERE driver_id = ?`;
-            conn.query(sql,[id], function (err, rows, fields) {
-                if (err) throw err;
-                conn.end();
-                resolve(rows);
-            });
-
-        }); //connect
-    }); //promise
-}
 
 app.get("/database", isAuthenticated, async function(req,res){
 
@@ -172,10 +60,30 @@ app.get("/nonadmin", isAuthenticated, async function (req, res){
         res.render("login");
     }
 });
+
 app.get("/driverID", async function (req, res){
-        let driverList = await getDriverID();
-        res.render("driverid", {"driverList": driverList});
+    let driverList = await getDriverID();
+    res.render("driverid", {"driverList": driverList});
 });
+
+app.get("/docknumber", async function (req, res){
+    //let driverList = await DriverId();
+    let rows = await getDockInfo(req.query);
+    res.render("docknumber",{"driverList" : rows});
+});
+
+/*
+app.post("/docknumber", async function(req, res){
+    let rows = await DriverId(req.body.id);
+    console.log(rows);
+    let message = "ID was not found!";
+    if (rows.affectedRows > 0) {
+        message= "Driver found!";
+    }
+    console.log(message);
+    res.render("docknumber", {"message":message});
+});
+*/
 
 app.get("/deleteDriver", async function(req, res){
     let rows = await deleteDriver(req.query.name);
@@ -198,7 +106,6 @@ app.get("/logout",function(req, res) {
     req.session.destroy();
     res.redirect("/");//taking the user back to the login screen
 });
-
 
 app.post("/loginProcess", async function (req, res){
     let users = await getUsers();
@@ -239,6 +146,25 @@ app.post("/loginProcess", async function (req, res){
     }
 });
 
+app.get("/updateDock", isAuthenticated, async function(req, res){
+    let dockInfo = await getDriverInfo(req.query.driver_id);
+    res.render("updateDock", {"dockInfo":dockInfo});
+});
+
+
+app.post("/updateDock", async function(req, res){
+    let rows = await updateDock(req.body);
+
+    let dockInfo = req.body;
+    console.log(rows);
+
+    let message = "Dock number WAS NOT updated!";
+    if (rows.affectedRows > 0) {
+        message= "Dock number successfully updated!";
+    }
+    res.render("updateDock", {"message":message, "dockInfo":dockInfo});
+});
+
 
 
 app.get("/", async function(req, res){
@@ -247,6 +173,8 @@ app.get("/", async function(req, res){
     }
     res.render("home");
 });//root
+
+
 
 // functions //
 
@@ -276,6 +204,35 @@ function insertDriverInfo(body){
 } // insertDriverInfo
 
 
+function updateDock(body){
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `UPDATE drivertable
+                      SET dock = ?
+                      
+                     WHERE driver_id = ?`;
+
+            let params = [body.dock, body.driver_id];
+
+            console.log(sql);
+
+            conn.query(sql, params, function (err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+
+        });//connect
+    });//promise
+} // updateProduct
+
+
 
 function deleteDriver(name){
 
@@ -300,6 +257,49 @@ function deleteDriver(name){
     });//promise
 }
 
+function getDriverInfo(driver_id) {
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject) {
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT * 
+                       FROM drivertable
+                       WHERE driver_id = ?`;
+            conn.query(sql, [driver_id], function(err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows[0]);
+            });
+        });
+    });
+}
+
+function getDockInfo(query) {
+    let id = query;
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject) {
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+            //let params = [];
+
+            let sql = `SELECT * 
+                       FROM drivertable
+                       WHERE driver_id = '${query.driver_id}'`; // if you change driver_id = ? it will display dock val
+            console.log("SQL:", sql);
+            conn.query(sql, [query.driver_idF], function(err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+        });
+    });
+}
+
 function getDriverList(){
 
     let conn = dbConnection();
@@ -309,9 +309,9 @@ function getDriverList(){
             if (err) throw err;
             console.log("Connected!");
 
-            let sql = `SELECT driver_id, first_name, last_name, produce_item, phone_number, license_plate, dock
+            let sql = `SELECT driver_id, duration, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
-                        ORDER BY driver_id`;
+                        ORDER BY duration ASC`;
 
             conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;
@@ -323,6 +323,7 @@ function getDriverList(){
         });//connect
     });//promise
 }
+
 function getDriverID(){
 
     let conn = dbConnection();
@@ -348,6 +349,28 @@ function getDriverID(){
     });//promise
 }
 
+function DriverId(id) {
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `SELECT dock FROM drivertable
+                        WHERE driver_id = ?`;
+            conn.query(sql,[id], function (err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                resolve(rows);
+            });
+
+        }); //connect
+    }); //promise
+}
+
+
 function getUsers() {
 
     let conn = dbConnection();
@@ -367,6 +390,9 @@ function getUsers() {
         }); //connect
     }); //promise
 }
+
+
+
 
 function isAuthenticated(req, res, next){
     if(!req.session.authenticated) res.redirect('/login');

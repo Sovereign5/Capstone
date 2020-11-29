@@ -16,11 +16,11 @@ header{
 }
 .column {
     float: left;
-    width: 11.1111111%;
+    width: 10%;
 }
 #dis{
     float: left;
-    width: 16.666%;
+    width: 12.5%;
 }
 
 /* Clear floats after the columns */
