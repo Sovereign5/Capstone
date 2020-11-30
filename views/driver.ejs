@@ -1,6 +1,15 @@
 <%- include('partials/header.ejs') %>
 
-<h1><strong>Driver Information</strong></h1>
+<head>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBebGg0EYJGo98SWvR4hPRZT7VdI5xiHls&callback=initMap"
+          type="text/javascript"></script>
+
+</head>
+<body>
+<h1 class="jumbotron" id="two"><strong>Driver Information</strong></h1>
 
 <form method ="POST">
 
@@ -20,11 +29,13 @@
   <input type="text" name="license_plate">
 
   <h3>Location: </h3>
-  <input type="hidden" id="duration" name="duration">
+  <input type="hidden" name="driver_location">
+  <input type="hidden" name="driver_duration" id="driver_duration">
+  <span id="duration"></span>
 
   <button id="DriverLocationBtn">Use Current Location</button><br><br>
-  <button id="SubmitDriverInfo"><a href ="/driverid">Submit Info</a></button><br>
-
+  <button type="submit" id="SubmitDriverInfo"><a href="/driverid">Submit Info</a></button><br><br>
+  <button type="submit"><a href="/">Home</a></button><br>
 
   <%= typeof(message) != "undefined"?message:"" %>
 
@@ -34,9 +45,9 @@
 <div class="container"></div>
 
 </body>
+
 <script>
   let map, infoWindow;
-
   async function initMap() {
     // Variables
     var userOriginCoords;
@@ -56,11 +67,8 @@
     // Try distance
     var service = new google.maps.DistanceMatrixService();
     var distance = await getDistance(service, userOrigin, userDestination);
-
     //console.log(callback.response); // cout doesn't work, returns undefined
     //console.log(distance);
-
-
   }
   // -------------- functions -------------------- //
   // New function that gets the user's location
@@ -117,14 +125,16 @@
           var duration = element.duration.text;
           var from = origins[i];
           var to = destinations[j];
-
-          $("#duration").submit(function(e) {
-            e.preventDefault();
-            getDistance();
-          });
+          var duration2 = response.rows[0].elements[0].duration;
+          var duration_text = duration2.text;
+          $("#duration").text(duration_text);
+          $("#driver_duration").val(duration_text);
         }
       }
     }
   }
 </script>
+
+
+
 </html>

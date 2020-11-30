@@ -8,7 +8,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public")); //folder for img, css, js
 
 app.use(express.urlencoded()); //use to parse data sent using the POST method
-app.use(session({ secret: 'any word', cookie: { maxAge: 10000 * 60 * 5 }}));
+app.use(session({ secret: 'any word', cookie: { maxAge: 10000 * 60 * 5 * 60}}));
 app.use(function(req, res, next) {
     res.locals.isAuthenticated = req.session.authenticated;
     next();
@@ -63,7 +63,7 @@ app.get("/nonadmin", isAuthenticated, async function (req, res){
 
 app.get("/driverID", async function (req, res){
     let driverList = await getDriverID();
-    res.render("driverid", {"driverList": driverList});
+    res.render("driverID", {"driverList": driverList});
 });
 
 app.get("/docknumber", async function (req, res){
@@ -187,10 +187,9 @@ function insertDriverInfo(body){
             console.log("Connected!");
 
             let sql = `INSERT INTO drivertable
-                        (first_name, last_name, produce_item, phone_number, license_plate)
-                         VALUES (?,?,?,?,?)`;
-
-            let params = [body.first_name, body.last_name, body.produce_item, body.phone_number, body.license_plate];
+                        (first_name, last_name, produce_item, phone_number, license_plate, duration)
+                         VALUES (?,?,?,?,?, ?)`;
+            let params = [body.first_name, body.last_name, body.produce_item, body.phone_number, body.license_plate, body.driver_duration];
 
             conn.query(sql, params, function (err, rows, fields) {
                 if (err) throw err;
@@ -277,27 +276,29 @@ function getDriverInfo(driver_id) {
     });
 }
 
-function getDockInfo(query) {
-    let id = query;
+function getDockInfo(query){
+
     let conn = dbConnection();
 
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve, reject){
         conn.connect(function(err) {
             if (err) throw err;
             console.log("Connected!");
-            //let params = [];
 
-            let sql = `SELECT * 
-                       FROM drivertable
-                       WHERE driver_id = '${query.driver_id}'`; // if you change driver_id = ? it will display dock val
+            let sql = `SELECT *
+                      FROM drivertable
+                      WHERE driver_id = '${query.driver_id}' `; // if you change driver_id = ? it will display dock val
+
             console.log("SQL:", sql);
-            conn.query(sql, [query.driver_idF], function(err, rows, fields) {
+            conn.query(sql, [query.driver_id], function (err, rows, fields) {
                 if (err) throw err;
                 conn.end();
                 resolve(rows);
             });
-        });
-    });
+
+        });//connect
+    });//promise
+
 }
 
 function getDriverList(){
@@ -308,10 +309,9 @@ function getDriverList(){
         conn.connect(function(err) {
             if (err) throw err;
             console.log("Connected!");
-
             let sql = `SELECT driver_id, duration, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
-                        ORDER BY duration ASC`;
+                        ORDER BY duration DESC `;
 
             conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;
