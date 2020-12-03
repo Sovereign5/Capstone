@@ -28,19 +28,19 @@
   <h3>License Plate: </h3>
   <input type="text" name="license_plate">
 
-  <h3>Location: </h3>
+  <h3>ETA:
   <input type="hidden" name="driver_location">
   <input type="hidden" name="driver_duration" id="driver_duration">
   <span id="duration"></span>
-
-  <button id="DriverLocationBtn">Use Current Location</button><br><br>
-  <button type="submit" id="SubmitDriverInfo"><a href="/driverid">Submit Info</a></button><br><br>
-  <button type="submit"><a href="/">Home</a></button><br>
-
+  </h3>
+  <button id="SubmitDriverInfo">Submit Info</button>
+<br>
   <%= typeof(message) != "undefined"?message:"" %>
-
+<br>
 </form>
-
+After Submission<br>
+<a href="/driverid"><button>Check ID</button></a><br>
+<a href="/"><button>Home</button></a>
 <div id="map"></div>
 <div class="container"></div>
 
@@ -133,6 +133,7 @@
       }
     }
   }
+
 </script>
 
 

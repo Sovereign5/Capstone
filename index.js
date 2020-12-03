@@ -31,6 +31,7 @@ app.post("/driver", async function(req, res){
     if (rows.affectedRows > 0) {
         message= "Driver successfully added!";
     }
+
     res.render("driver", {"message":message});
 
 });
