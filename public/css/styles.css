@@ -33,3 +33,11 @@ header{
     display: table;
     clear: both;
 }
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    /* Height of the footer*/
+    height: 150px;
+    background-image: url("/img/wh.jpg");
+}

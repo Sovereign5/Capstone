@@ -17,7 +17,7 @@
                             <input type="password" name="password" id="password" class="form-control">
                         </div>
                         <button class="btn btn-primary" id="loginBtn">Login!</button>
-
+                        <button class="btn btn-primary" id="home">Home</button>
                         <!--                        </form>-->
                     </div>
                 </div>
@@ -50,7 +50,10 @@
                     }
                 });//ajax
             });//click
+            $("#home").on("click", function(){
+                location.href = "/";
+            });//click
         }); //document.ready
     </script>
     </body>
-    </html>
+<%- include('partials/footer.ejs')%>

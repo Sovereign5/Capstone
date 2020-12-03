@@ -1,12 +1,21 @@
 
 <%- include('partials/header.ejs') %>
 
-<h2>Your Id Number: </h2>
 
 <% driverList.forEach(function(driver){  %>
+    <h2>
+    <div><%= driver.first_name%></div>
+        Your Driver Id Is
+    </h2>
+    <br>
+<% }) %>
+
+<% driverList.forEach(function(driver){  %>
+    <h3>
     <div><%= driver.driver_id%></div>
+    </h3>
     <br>
 <% }) %>
 <button type="submit"><a href="/">Home</a></button><br>
 </body>
-</html>
+<%- include('partials/footer.ejs')%>

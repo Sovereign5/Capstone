@@ -334,7 +334,7 @@ function getDriverID(){
             if (err) throw err;
             console.log("Connected!");
 
-            let sql = `SELECT driver_id
+            let sql = `SELECT driver_id, first_name
                         FROM drivertable
                         ORDER BY driver_id DESC
                         LIMIT 1`;

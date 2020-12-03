@@ -27,7 +27,7 @@
 
   <h3>License Plate: </h3>
   <input type="text" name="license_plate">
-
+  <br>
   <h3>ETA:
   <input type="hidden" name="driver_location">
   <input type="hidden" name="driver_duration" id="driver_duration">
@@ -38,8 +38,8 @@
   <%= typeof(message) != "undefined"?message:"" %>
 <br>
 </form>
-After Submission<br>
-<a href="/driverid"><button>Check ID</button></a><br>
+<h5>After Submission</h5><br>
+<a href="/driverid"><button>Check ID</button></a><br><br><br>
 <a href="/"><button>Home</button></a>
 <div id="map"></div>
 <div class="container"></div>
@@ -135,7 +135,4 @@ After Submission<br>
   }
 
 </script>
-
-
-
-</html>
+<%- include('partials/footer.ejs')%>
