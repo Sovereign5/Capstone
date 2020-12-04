@@ -2,29 +2,29 @@
 <h1>List of Current Drivers</h1>
 <h4>
     <div class="row">
-        <div class="column"></div>
-        <div class="column"></div>
-        <div class="column">ID:</div>
-        <div class="column">ETA:</div>
-        <div class="column">First Name:</div>
-        <div class="column">Last Name:</div>
-        <div class="column">Produce:</div>
-        <div class="column">Phone Number:</div>
-        <div class="column">Plate Number:</div>
-        <div class="column">Dock Number:</div>
+        <div class="column"id="data"id="data"></div>
+        <div class="column"id="data"></div>
+        <div class="column"id="data">ID:</div>
+        <div class="column"id="data">ETA:</div>
+        <div class="column"id="data">First Name:</div>
+        <div class="column"id="data">Last Name:</div>
+        <div class="column"id="data">Produce:</div>
+        <div class="column"id="data">Phone Number:</div>
+        <div class="column"id="data">Plate Number:</div>
+        <div class="column"id="data">Dock Number:</div>
     </div>
-    <div class="row">
+    <div class="row" id="data">
         <% driverList.forEach(function(driver){  %>
-            <div class="column">[<a href="/updateDock?driver_id=<%= driver.driver_id %>">UPDATE</a>]</div>
-            <div class="column"> [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]</div>
-            <div class="column"><%= driver.driver_id %></div>
-            <div class="column"><%= driver.duration%></div>
-            <div class="column"><%= driver.first_name%></div>
-            <div class="column"><%= driver.last_name%></div>
-            <div class="column"><%= driver.produce_item%></div>
-            <div class="column"><%= driver.phone_number%></div>
-            <div class="column"><%= driver.license_plate%></div>
-            <div class="column"><%= driver.dock%></div>
+            <div class="column"id="data">[<a href="/updateDock?driver_id=<%= driver.driver_id %>">UPDATE</a>]</div>
+            <div class="column"id="data"> [<a onclick="deleteConfirm()" class="removeDriver" href="/deleteDriver?name=<%= driver.driver_id %>">DELETE</a>]</div>
+            <div class="column"id="data"><%= driver.driver_id %></div>
+            <div class="column"id="data"><%= driver.duration%></div>
+            <div class="column"id="data"><%= driver.first_name%></div>
+            <div class="column"id="data"><%= driver.last_name%></div>
+            <div class="column"id="data"><%= driver.produce_item%></div>
+            <div class="column"id="data"><%= driver.phone_number%></div>
+            <div class="column"id="data"><%= driver.license_plate%></div>
+            <div class="column"id="data"><%= driver.dock%></div>
             <br>
         <% }) %>
     </div>
@@ -32,7 +32,6 @@
 <form action="/logout">
     <button> Logout </button>
 </form>
-</body>
 <script>
     function deleteConfirm() {
         if (!confirm("Delete Driver?")) {
@@ -40,4 +39,3 @@
         }
     }
 </script>
-<%- include('partials/footer.ejs')%>

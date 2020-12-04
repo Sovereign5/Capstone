@@ -1,13 +1,17 @@
 <%- include('partials/header.ejs') %>
 
-<h2>Your Dock Number Is: </h2>
+<h2>
+    <% driverList.forEach( function(driver){ %>
+<div><h2><%= driver.first_name %></h2></div>
+    <% })  %>
+</h2>
+<h2>
+    Your Dock Number Is:
+</h2>
 <br>
-<div class="container">
-    <table class="table">
+<div>
         <% driverList.forEach( function(driver){ %>
-            <tr>
-                <td class="align-middle"><h2><%= driver.dock %></h2></td>
-            </tr>
+                <div id="data"><h2><%= driver.dock %></h2></div>
         <% })  %>
 
     </table>

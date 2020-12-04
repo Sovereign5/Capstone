@@ -21,6 +21,7 @@ header{
 #two{
     background-color: lightgrey;
 }
+
 #dis{
     float: left;
     width: 12.5%;
@@ -36,8 +37,12 @@ header{
 #footer {
     position: fixed;
     bottom: 0;
+    text-align: left;
     width: 100%;
     /* Height of the footer*/
-    height: 150px;
+    height: 90px;
+    background-image: url("/img/wh.jpg");
+}
+#data{
     background-image: url("/img/wh.jpg");
 }
