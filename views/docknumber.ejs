@@ -3,7 +3,7 @@
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBebGg0EYJGo98SWvR4hPRZT7VdI5xiHls&callback=initMap"
     type="text/javascript"></script>
 </head>
-<!-- <body onload="myFunction()"></body> THIS STARTS THE CLOCK--> 
+ <body onload="myFunction()"></body> <!-- THIS STARTS THE CLOCK  -->
 <h2>Your Dock Number Is: </h2>
 
 <br>
@@ -21,6 +21,9 @@
 </div>
 <div id="map"></div>
 <div class="container"></div>
+<input type="hidden" name="driver_location" id="driver_location">
+<input type="hidden" name="driver_duration" id="driver_duration">
+<input type="hidden" name="driver_id" id="driver_id" value="<%= driverList[0].driver_id %>">
 <button><a href ="/">Home</a></button>
 </body>
 <!-- <script> -->
@@ -28,11 +31,33 @@
 <script>
 
     let map, infoWindow;
-    // function myFunction() { // THIS is the set interval, will update every 5000 miliseconds
-    // 	setInterval(function() {
-    // 		initMap();
-    // 	}, 5000);
-    // }
+    function myFunction() { // THIS is the set interval, will update every 5000 miliseconds
+    	setInterval(function() {
+    		initMap();
+            updateDB();
+    	}, 5000);
+    }
+
+    async function updateDB() {
+        var driverLocation = $("#driver_location").val();
+        var driverDuration = $("#driver_duration").val();
+        var driverID = $("#driver_id").val();
+        var driverDurationInSeconds = $("#driver_duration_seconds").val();
+        $.ajax({
+
+            method: "POST",
+            url: "/updateDB",
+            dataType: "JSON",
+            data: { "driverLocation":driverLocation,
+                    "driverDuration":driverDuration,
+                    "driverID":driverID,
+                    "driverDurationInSeconds":driverDurationInSeconds },
+            success: function(result,status) {
+            }
+
+        });//ajax
+    }
+
     async function initMap() {
         // Variables
         var userOriginCoords;
@@ -76,8 +101,8 @@
     }
     // Distance Function
     async function getDistance(service, userOrigin, userDestination) {
-        console.log("getDistance()");
-        console.log(userOrigin);
+        // console.log("getDistance()");
+        // console.log(userOrigin);
         service.getDistanceMatrix(
             {
                 origins: [userOrigin],
@@ -101,7 +126,7 @@
     }
     // Callback function provided by Google. I have no clue how to use this.
     function callback(response, status) {
-        console.log(response);
+        // console.log(response);
         if (status == 'OK') {
             var origins = response.originAddresses;
             var destinations = response.destinationAddresses;
@@ -116,9 +141,17 @@
 
                     var duration2 = response.rows[0].elements[0].duration;
                     var duration_text = duration2.text;
+                    var duration_int = duration2.value;
+
+                    // var location2 = response.destinationAddresses[1];
+                    // var location_text = location2.text;
 
                     $("#duration").text(duration_text);
                     $("#driver_duration").val(duration_text);
+
+                    $("#driver_duration_seconds").val(duration_int);
+
+                    // $("#driver_location").val(location_text);
 
                 }
             }
