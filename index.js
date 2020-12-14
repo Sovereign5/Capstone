@@ -149,14 +149,13 @@ app.post("/loginProcess", async function (req, res){
 });
 
 app.post("/updateDB", async function (req, res){
-    const {driverLocation, driverDuration, driverID, driverDurationInSeconds} = req.body;
+    const {driverDuration, driverID} = req.body;
     // console.log(driverLocation);
     console.log(driverDuration);
     console.log(driverID);
-    console.log(driverDurationInSeconds)
+    //console.log(driverDurationInSeconds);
     let driver = getDriverInfo(driverID);
-
-
+    updateDriverDuration(driverID, driverDuration);
 });
 
 app.get("/updateDock", isAuthenticated, async function(req, res){
@@ -244,7 +243,7 @@ function updateDock(body){
     });//promise
 } // updateProduct
 
-function updateDriver(id, duration, durationInSeconds){
+function updateDriverDuration(id, duration){
 
     let conn = dbConnection();
 
@@ -257,6 +256,16 @@ function updateDriver(id, duration, durationInSeconds){
                        SET duration = ?
 
                        WHERE driver_id = ?`;
+
+            let params = [duration, id];
+            console.log(id + " " + duration);
+
+            conn.query(sql, params, function(err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                console.log(id + " updated");
+                resolve(rows);
+            });
         }); //connect
     }); // Promise
 }

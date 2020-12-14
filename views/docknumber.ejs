@@ -24,6 +24,7 @@
 <input type="hidden" name="driver_location" id="driver_location">
 <input type="hidden" name="driver_duration" id="driver_duration">
 <input type="hidden" name="driver_id" id="driver_id" value="<%= driverList[0].driver_id %>">
+<span id="duration"></span>
 <button><a href ="/">Home</a></button>
 </body>
 <!-- <script> -->
@@ -42,16 +43,14 @@
         var driverLocation = $("#driver_location").val();
         var driverDuration = $("#driver_duration").val();
         var driverID = $("#driver_id").val();
-        var driverDurationInSeconds = $("#driver_duration_seconds").val();
+        // var driverDurationInSeconds = $("#driver_duration_seconds").val();
         $.ajax({
 
             method: "POST",
             url: "/updateDB",
             dataType: "JSON",
-            data: { "driverLocation":driverLocation,
-                    "driverDuration":driverDuration,
-                    "driverID":driverID,
-                    "driverDurationInSeconds":driverDurationInSeconds },
+            data: { "driverDuration":driverDuration,
+                    "driverID":driverID },
             success: function(result,status) {
             }
 
@@ -141,7 +140,6 @@
 
                     var duration2 = response.rows[0].elements[0].duration;
                     var duration_text = duration2.text;
-                    var duration_int = duration2.value;
 
                     // var location2 = response.destinationAddresses[1];
                     // var location_text = location2.text;
