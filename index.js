@@ -199,9 +199,11 @@ function insertDriverInfo(body){
             console.log("Connected!");
 
             let sql = `INSERT INTO drivertable
-                        (first_name, last_name, produce_item, phone_number, license_plate, duration)
-                         VALUES (?,?,?,?,?, ?)`;
-            let params = [body.first_name, body.last_name, body.produce_item, body.phone_number, body.license_plate, body.driver_duration];
+                        (first_name, last_name, produce_item, phone_number, license_plate, duration, duration_sec)
+                          VALUES (?,?,?,?,?,?,?)`;
+ 
+             let params = [body.first_name, body.last_name, body.produce_item, body.phone_number, body.license_plate,
+                          body.driver_duration, body.driver_duration_sec];
 
             conn.query(sql, params, function (err, rows, fields) {
                 if (err) throw err;
@@ -348,9 +350,9 @@ function getDriverList(){
         conn.connect(function(err) {
             if (err) throw err;
             console.log("Connected!");
-            let sql = `SELECT driver_id, duration, first_name, last_name, produce_item, phone_number, license_plate, dock
+            let sql = `SELECT driver_id, duration, duration_sec, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
-                        ORDER BY duration ASC `;
+                        ORDER BY duration_sec ASC `;
 
             conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;

@@ -30,10 +30,13 @@
     <h3>Location: </h3>
     <input type="hidden" name="driver_location">
     <input type="hidden" name="driver_duration" id="driver_duration">
+    <input type="hidden" name="driver_duration_sec" id="driver_duration_sec">
     <span id="duration"></span>
 
-    <button id="DriverLocationBtn">Use Current Location</button><br><br>
+<!--    <button id="DriverLocationBtn">Use Current Location</button><br><br>-->
     <button type="submit" id="SubmitDriverInfo">Submit Info</button><br>
+<!--    <button type="submit" id="SubmitDriverInfo"><a href="/driverid">Submit Info</a></button><br>-->
+    <button><a href="/">Home</a></button><br>
 
     <%= typeof(message) != "undefined"?message:"" %>
 
@@ -45,6 +48,7 @@
 </body>
 
 <script>
+
     let map, infoWindow;
 
     async function initMap() {
@@ -130,9 +134,14 @@
 
                     var duration2 = response.rows[0].elements[0].duration;
                     var duration_text = duration2.text;
+                    var duration_val = duration2.value;
 
+                    // $("#duration").text(duration_val);
                     $("#duration").text(duration_text);
+
                     $("#driver_duration").val(duration_text);
+                    $("#driver_duration_sec").val(duration_val);
+                    // $("#driver_duration").val(duration_text);
 
                 }
             }
