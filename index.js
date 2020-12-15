@@ -13,6 +13,9 @@ app.use(function(req, res, next) {
     res.locals.isAuthenticated = req.session.authenticated;
     next();
 });
+
+
+
 app.get("/driver", async function(req,res){
     res.render("driver");
 });
@@ -147,6 +150,16 @@ app.post("/loginProcess", async function (req, res){
     }
 });
 
+app.post("/updateDB", async function (req, res){
+    const {driverDuration, driverID} = req.body;
+    // console.log(driverLocation);
+    console.log(driverDuration);
+    console.log(driverID);
+    //console.log(driverDurationInSeconds);
+    let driver = getDriverInfo(driverID);
+    updateDriverDuration(driverID, driverDuration);
+});
+
 app.get("/updateDock", isAuthenticated, async function(req, res){
     let dockInfo = await getDriverInfo(req.query.driver_id);
     res.render("updateDock", {"dockInfo":dockInfo});
@@ -178,6 +191,31 @@ app.get("/", async function(req, res){
 
 
 // functions //
+function updateDriverDuration(id, duration){
+
+    let conn = dbConnection();
+
+    return new Promise(function(resolve, reject) {
+        conn.connect(function(err) {
+            if (err) throw err;
+            console.log("Connected!");
+
+            let sql = `UPDATE drivertable
+                       SET duration = ?
+                       WHERE driver_id = ?`;
+
+            let params = [duration, id];
+            console.log(id + " " + duration);
+
+            conn.query(sql, params, function(err, rows, fields) {
+                if (err) throw err;
+                conn.end();
+                console.log(id + " updated");
+                resolve(rows);
+            });
+        }); //connect
+    }); // Promise
+}
 
 function insertDriverInfo(body){
     let conn = dbConnection();
@@ -310,9 +348,9 @@ function getDriverList(){
         conn.connect(function(err) {
             if (err) throw err;
             console.log("Connected!");
-            let sql = `SELECT driver_id, duration, first_name, last_name, produce_item, phone_number, license_plate, dock
+            let sql = `SELECT driver_id, duration, duration_sec, first_name, last_name, produce_item, phone_number, license_plate, dock
                         FROM drivertable
-                        ORDER BY duration DESC `;
+                        ORDER BY duration_sec DESC `;
 
             conn.query(sql, function (err, rows, fields) {
                 if (err) throw err;

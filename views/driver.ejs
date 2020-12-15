@@ -31,6 +31,7 @@
   <h3>ETA:
   <input type="hidden" name="driver_location">
   <input type="hidden" name="driver_duration" id="driver_duration">
+    <input type="hidden" name =driver_duration_sec" id="driver_duration_sec">
   <span id="duration"></span>
   </h3>
   <button id="SubmitDriverInfo">Submit Info</button>
@@ -127,8 +128,11 @@
           var to = destinations[j];
           var duration2 = response.rows[0].elements[0].duration;
           var duration_text = duration2.text;
+          var duration_val = duration2.value;
+
           $("#duration").text(duration_text);
           $("#driver_duration").val(duration_text);
+          $("#driver_duration_sec").val(duration_val);
         }
       }
     }
