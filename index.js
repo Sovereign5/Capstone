@@ -65,9 +65,9 @@ app.get("/nonadmin", isAuthenticated, async function (req, res){
     }
 });
 
-app.get("/driverID", async function (req, res){
+app.get("/driverid", async function (req, res){
     let driverList = await getDriverID();
-    res.render("driverID", {"driverList": driverList});
+    res.render("driverid", {"driverList": driverList});
 });
 
 app.get("/docknumber", async function (req, res){
@@ -160,13 +160,13 @@ app.post("/updateDB", async function (req, res){
     updateDriverDuration(driverID, driverDuration);
 });
 
-app.get("/updateDock", isAuthenticated, async function(req, res){
+app.get("/updateDdck", isAuthenticated, async function(req, res){
     let dockInfo = await getDriverInfo(req.query.driver_id);
-    res.render("updateDock", {"dockInfo":dockInfo});
+    res.render("updatedock", {"dockInfo":dockInfo});
 });
 
 
-app.post("/updateDock", async function(req, res){
+app.post("/updatedock", async function(req, res){
     let rows = await updateDock(req.body);
 
     let dockInfo = req.body;
@@ -176,7 +176,7 @@ app.post("/updateDock", async function(req, res){
     if (rows.affectedRows > 0) {
         message= "Dock number successfully updated!";
     }
-    res.render("updateDock", {"message":message, "dockInfo":dockInfo});
+    res.render("updatedock", {"message":message, "dockInfo":dockInfo});
 });
 
 
