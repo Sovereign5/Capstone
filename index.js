@@ -160,7 +160,7 @@ app.post("/updateDB", async function (req, res){
     updateDriverDuration(driverID, driverDuration);
 });
 
-app.get("/updateDdck", isAuthenticated, async function(req, res){
+app.get("/updatedock", isAuthenticated, async function(req, res){
     let dockInfo = await getDriverInfo(req.query.driver_id);
     res.render("updatedock", {"dockInfo":dockInfo});
 });
